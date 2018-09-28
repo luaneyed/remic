@@ -1,0 +1,6 @@
+[package]
+name = "remic-server"
+version = "0.1.0"
+authors = ["Sangguk Lee <luaneyed@gmail.com>"]
+
+[dependencies]
