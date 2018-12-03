@@ -1,20 +1,38 @@
 mod storage;
-mod thread_pool;
+mod connection_pool;
 
 use std::io::prelude::*;
-use std::net::TcpStream;
-use std::net::TcpListener;
+// use std::net::TcpStream;
+// use std::net::TcpListener;
 use std::str::from_utf8;
 use std::io::ErrorKind::{InvalidInput, NotFound};
+use tokio::net::{TcpListener, TcpStream};
 use std::io::Error;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:9736").unwrap();
-    let pool = thread_pool::ThreadPool::new(4);
+    println!("Listening on: {}", addr);
+
+    let mut incoming = listener.incoming();
+
+    while let Some(stream) = await!(incoming.next()) {
+        let stream = stream.unwrap();
+        handle(stream);
+    }
+
+    tokio::run_async(async {
+        let mut incoming = listener.incoming();
+
+        while let Some(stream) = await!(incoming.next()) {
+            let stream = stream.unwrap();
+            handle(stream);
+        }
+    });
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
 
+        // @todo spawn_async
         pool.execute(|| {
             handle_connection(stream);
         });

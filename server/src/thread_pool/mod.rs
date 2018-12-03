@@ -3,6 +3,8 @@ use std::sync::mpsc;
 use std::sync::Arc;
 use std::sync::Mutex;
 
+use futures::executor::ThreadPoolBuilder;
+
 pub struct ThreadPool {
     workers: Vec<Worker>,
     sender: mpsc::Sender<Message>,
