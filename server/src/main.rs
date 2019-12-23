@@ -2,11 +2,11 @@ mod storage;
 mod thread_pool;
 
 use std::io::prelude::*;
-use std::net::TcpStream;
-use std::net::TcpListener;
-use std::str::from_utf8;
-use std::io::ErrorKind::{InvalidInput, NotFound};
 use std::io::Error;
+use std::io::ErrorKind::{InvalidInput, NotFound};
+use std::net::TcpListener;
+use std::net::TcpStream;
+use std::str::from_utf8;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:9736").unwrap();
@@ -26,20 +26,19 @@ fn handle_connection(mut stream: TcpStream) {
         let mut read = [0; 1028];
         match stream.read(&mut read) {
             Ok(n) => {
-                if n == 0 { //  connection was closed
+                if n == 0 {
+                    //  connection was closed
                     break;
                 }
 
-                let received_string = from_utf8(&read).expect("Found invalid UTF-8").trim_matches(char::from(0));
+                let received_string = from_utf8(&read)
+                    .expect("Found invalid UTF-8")
+                    .trim_matches(char::from(0));
                 println!("Received {}", received_string);
-                
+
                 let result_string = match execute(received_string.split(' ')) {
-                    Ok(ok_result) => {
-                        ok_result.to_string()
-                    },
-                    Err(error) => {
-                        error.get_ref().unwrap().to_string()
-                    }
+                    Ok(ok_result) => ok_result.to_string(),
+                    Err(error) => error.get_ref().unwrap().to_string(),
                 };
 
                 stream.write(result_string.as_bytes()).unwrap();
@@ -52,7 +51,7 @@ fn handle_connection(mut stream: TcpStream) {
     }
 }
 
-fn execute<'a, 'b, T: Iterator<Item=&'a str>> (mut args: T)-> Result<&'b str, Error> {
+fn execute<'a, 'b, T: Iterator<Item = &'a str>>(mut args: T) -> Result<&'b str, Error> {
     match args.next() {
         Some("get") => {
             if let Some(ref key) = args.next() {
@@ -60,12 +59,12 @@ fn execute<'a, 'b, T: Iterator<Item=&'a str>> (mut args: T)-> Result<&'b str, Er
                 if let Some(val) = stored {
                     return Ok(val);
                 }
-                
+
                 return Err(Error::new(NotFound, "Not Found"));
             }
 
             Err(Error::new(InvalidInput, "Key is not given"))
-        },
+        }
         Some("set") => {
             if let Some(key) = args.next() {
                 if let Some(val) = args.next() {
@@ -74,12 +73,10 @@ fn execute<'a, 'b, T: Iterator<Item=&'a str>> (mut args: T)-> Result<&'b str, Er
                 }
                 return Err(Error::new(InvalidInput, "Value is not given"));
             }
-            
+
             Err(Error::new(InvalidInput, "Key is not given"))
-        },
-        Some(_) => {
-            Err(Error::new(InvalidInput, "Unknown Command"))
-        },
-        None => Err(Error::new(InvalidInput, "Command is not given"))
+        }
+        Some(_) => Err(Error::new(InvalidInput, "Unknown Command")),
+        None => Err(Error::new(InvalidInput, "Command is not given")),
     }
 }
