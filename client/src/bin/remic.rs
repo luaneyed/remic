@@ -1,4 +1,3 @@
-extern crate remic;
 use std::env;
 
 fn main() {
