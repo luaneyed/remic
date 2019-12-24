@@ -3,7 +3,7 @@ use clap::{App, Arg, SubCommand};
 
 fn main() {
     let matches = App::new("Remic CLI")
-        .version("0.0.1")
+        .version(env!("CARGO_PKG_VERSION"))
         .author("Sangguk Lee <sangguk258@gmail.com>")
         .about("Remic Client CLI")
         .subcommand(
