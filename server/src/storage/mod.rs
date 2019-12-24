@@ -1,6 +1,21 @@
-pub fn get<'a, 'b>(_key: &'a str) -> Option<&'b str> {
-    // Some("getResult")
-    None
+use std::collections::HashMap;
+
+pub struct Store {
+    map: HashMap<String, String>,
 }
 
-pub fn set(_key: &str, _val: &str) {}
+impl Store {
+    pub fn new() -> Store {
+        Store {
+            map: HashMap::new(),
+        }
+    }
+
+    pub fn set(&mut self, key: String, value: String) {
+        self.map.insert(key, value);
+    }
+
+    pub fn get(&self, key: &str) -> Option<&String> {
+        self.map.get(key)
+    }
+}
