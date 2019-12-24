@@ -11,12 +11,16 @@ impl Store {
         }
     }
 
+    pub fn get(&self, key: &str) -> Option<&String> {
+        self.map.get(key)
+    }
+
     pub fn set(&mut self, key: String, value: String) {
         self.map.insert(key, value);
     }
 
-    pub fn get(&self, key: &str) -> Option<&String> {
-        self.map.get(key)
+    pub fn del(&mut self, key: &str) {
+        self.map.remove(key);
     }
 
     pub fn flush(&mut self) {
@@ -58,6 +62,18 @@ mod tests {
 
         store.set("key1".to_owned(), "value1".to_owned());
         assert_eq!(store.get("key2"), None);
+    }
+
+    // Should get `None` when getting a non-existent key
+    #[test]
+    fn delete() {
+        let mut store = Store::new();
+
+        store.set("key1".to_owned(), "value1".to_owned());
+        store.set("key2".to_owned(), "value2".to_owned());
+        store.del("key1");
+        assert_eq!(store.get("key1"), None);
+        assert_eq!(store.get("key2"), Some(&"value2".to_owned()));
     }
 
     #[test]

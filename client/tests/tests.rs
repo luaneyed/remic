@@ -48,13 +48,12 @@ fn cli_set() {
 }
 
 #[test]
-fn cli_rm() {
+fn cli_del() {
     Command::cargo_bin("remic")
         .unwrap()
-        .args(&["rm", "key1"])
+        .args(&["del", "key1"])
         .assert()
-        .failure()
-        .stderr(contains("Found argument 'rm' which wasn't expected"));
+        .stdout(contains("Deleted Successfully"));
 }
 
 #[test]

@@ -13,6 +13,10 @@ pub fn set(key: &str, val: &str) -> Result<String, Error> {
     execute(&format!("set {} {}", key, val))
 }
 
+pub fn del(key: &str) -> Result<String, Error> {
+    execute(&format!("del {}", key))
+}
+
 pub fn flush() -> Result<String, Error> {
     execute("flush")
 }
