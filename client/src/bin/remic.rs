@@ -2,7 +2,7 @@ extern crate clap;
 use clap::{App, Arg, SubCommand};
 
 fn main() {
-    let matches = App::new("Remic")
+    let matches = App::new("Remic CLI")
         .version("0.0.1")
         .author("Sangguk Lee <sangguk258@gmail.com>")
         .about("Remic Client CLI")
