@@ -2,6 +2,14 @@ use assert_cmd::prelude::*;
 use predicates::str::contains;
 use std::process::Command;
 
+fn flush() {
+    Command::cargo_bin("remic")
+        .unwrap()
+        .args(&["flush"])
+        .spawn()
+        .unwrap();
+}
+
 // `remic` with no args should exit with a non-zero code.
 #[test]
 fn cli_no_args() {
@@ -21,12 +29,12 @@ fn cli_version() {
 // `remic get <KEY>` should print "unimplemented" to stderr and exit with non-zero code
 #[test]
 fn cli_get() {
+    flush();
     Command::cargo_bin("remic")
         .unwrap()
         .args(&["get", "key1"])
         .assert()
-        .failure()
-        .stderr(contains("unimplemented"));
+        .stdout(contains("Not Found"));
 }
 
 // `remic set <KEY> <VALUE>` should print "unimplemented" to stderr and exit with non-zero code
@@ -36,11 +44,9 @@ fn cli_set() {
         .unwrap()
         .args(&["set", "key1", "value1"])
         .assert()
-        .failure()
-        .stderr(contains("unimplemented"));
+        .stdout(contains("Set Successfully"));
 }
 
-// `remic rm <KEY>` should print "unimplemented" to stderr and exit with non-zero code
 #[test]
 fn cli_rm() {
     Command::cargo_bin("remic")
@@ -48,7 +54,7 @@ fn cli_rm() {
         .args(&["rm", "key1"])
         .assert()
         .failure()
-        .stderr(contains("unimplemented"));
+        .stderr(contains("Found argument 'rm' which wasn't expected"));
 }
 
 #[test]
