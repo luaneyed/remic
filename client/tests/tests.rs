@@ -2,10 +2,10 @@ use assert_cmd::prelude::*;
 use predicates::str::contains;
 use std::process::Command;
 
-fn flush() {
+fn flushall() {
     Command::cargo_bin("remic")
         .unwrap()
-        .args(&["flush"])
+        .args(&["flushall"])
         .spawn()
         .unwrap();
 }
@@ -29,7 +29,7 @@ fn cli_version() {
 // `remic get <KEY>` should print "unimplemented" to stderr and exit with non-zero code
 #[test]
 fn cli_get() {
-    flush();
+    flushall();
     Command::cargo_bin("remic")
         .unwrap()
         .args(&["get", "key1"])

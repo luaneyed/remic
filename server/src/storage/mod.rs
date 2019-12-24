@@ -23,7 +23,7 @@ impl Store {
         self.map.remove(key);
     }
 
-    pub fn flush(&mut self) {
+    pub fn flushall(&mut self) {
         self.map.clear();
     }
 }
@@ -77,11 +77,11 @@ mod tests {
     }
 
     #[test]
-    fn flush() {
+    fn flushall() {
         let mut store = Store::new();
 
         store.set("key1".to_owned(), "value1".to_owned());
-        store.flush();
+        store.flushall();
         assert_eq!(store.get("key1"), None);
     }
 }

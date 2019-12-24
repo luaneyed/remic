@@ -17,8 +17,8 @@ pub fn del(key: &str) -> Result<String, Error> {
     execute(&format!("del {}", key))
 }
 
-pub fn flush() -> Result<String, Error> {
-    execute("flush")
+pub fn flushall() -> Result<String, Error> {
+    execute("flushall")
 }
 
 pub fn execute(command: &str) -> Result<String, Error> {

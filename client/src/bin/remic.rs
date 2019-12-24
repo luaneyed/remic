@@ -22,7 +22,7 @@ fn main() {
                 .about("delete value by key")
                 .arg(Arg::with_name("key").index(1).required(true)),
         )
-        .subcommand(SubCommand::with_name("flush").about("delete all data"))
+        .subcommand(SubCommand::with_name("flushall").about("delete all data"))
         .get_matches();
 
     let result = match matches.subcommand() {
@@ -31,7 +31,7 @@ fn main() {
             remic::set(args.value_of("key").unwrap(), args.value_of("val").unwrap()).unwrap()
         }
         ("del", Some(args)) => remic::del(args.value_of("key").unwrap()).unwrap(),
-        ("flush", _) => remic::flush().unwrap(),
+        ("flushall", _) => remic::flushall().unwrap(),
         (&_, _) => panic!("Not supporting command"),
     };
     println!("{}", result);
