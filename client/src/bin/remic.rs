@@ -17,6 +17,7 @@ fn main() {
                 .arg(Arg::with_name("key").index(1).required(true))
                 .arg(Arg::with_name("val").index(2).required(true)),
         )
+        .subcommand(SubCommand::with_name("flush").about("delete all data"))
         .get_matches();
 
     let result = match matches.subcommand() {
@@ -24,6 +25,7 @@ fn main() {
         ("set", Some(args)) => {
             remic::set(args.value_of("key").unwrap(), args.value_of("val").unwrap()).unwrap()
         }
+        ("flush", _) => remic::flush().unwrap(),
         (&_, _) => panic!("Not supporting command"),
     };
     println!("{}", result);

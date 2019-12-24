@@ -13,6 +13,10 @@ pub fn set(key: &str, val: &str) -> Result<String, Error> {
     execute(&format!("set {} {}", key, val))
 }
 
+pub fn flush() -> Result<String, Error> {
+    execute("flush")
+}
+
 pub fn execute(command: &str) -> Result<String, Error> {
     let mut stream = TcpStream::connect("127.0.0.1:9736").unwrap();
     let _ = stream.write(command.as_bytes());

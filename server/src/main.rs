@@ -61,6 +61,10 @@ fn handle_connection(storage: std::sync::Arc<std::sync::RwLock<Store>>, mut stre
                                 .set(key.to_string(), val.to_string());
                             stream.write_all(b"Set Successfully")
                         }
+                        Command::Flush => {
+                            storage.write().unwrap().flush();
+                            stream.write_all(b"Flushed Successfully")
+                        }
                     },
                     Err(error) => stream.write_all(error.get_ref().unwrap().to_string().as_bytes()),
                 }
@@ -95,6 +99,7 @@ fn get_command<'a, T: Iterator<Item = &'a str>>(mut args: T) -> Result<Command<'
                 Err(Error::new(InvalidInput, "Key is not given"))
             }
         }
+        Some("flush") => Ok(Command::Flush),
         Some(_) => Err(Error::new(InvalidInput, "Unknown Command")),
         None => Err(Error::new(InvalidInput, "Command is not given")),
     }

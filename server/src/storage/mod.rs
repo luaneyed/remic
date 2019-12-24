@@ -18,6 +18,10 @@ impl Store {
     pub fn get(&self, key: &str) -> Option<&String> {
         self.map.get(key)
     }
+
+    pub fn flush(&mut self) {
+        self.map.clear();
+    }
 }
 
 #[cfg(test)]
@@ -54,5 +58,14 @@ mod tests {
 
         store.set("key1".to_owned(), "value1".to_owned());
         assert_eq!(store.get("key2"), None);
+    }
+
+    #[test]
+    fn flush() {
+        let mut store = Store::new();
+
+        store.set("key1".to_owned(), "value1".to_owned());
+        store.flush();
+        assert_eq!(store.get("key1"), None);
     }
 }
