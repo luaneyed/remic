@@ -1,5 +1,5 @@
 [package]
-name = "remic-server"
+name = "remic_server"
 version = "0.1.0"
 authors = ["Sangguk Lee <sangguk258@gmail.com>"]
 edition = "2018"
